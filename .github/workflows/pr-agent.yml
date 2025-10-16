@@ -1,55 +1,13 @@
-name: PR-Agent Review
-
+name: PR Agent
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-  pull_request_review:
-    types: [submitted]
-
+    types: [opened, synchronize]
 jobs:
-  pr-agent:
+  pr_agent_job:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-    
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install PR-Agent
-      run: |
-        pip install pr-agent[all]
-    
-    - name: Run PR-Agent Review
+    - name: PR Agent action step
+      uses: Codium-ai/pr-agent@main
       env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-      run: |
-        python -m pr_agent.cli review --pr_number ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
-    
-    - name: Run PR-Agent Security Review
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-      run: |
-        python -m pr_agent.cli security_review --pr_number ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
-    
-    - name: Run PR-Agent Best Practices Review
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-      run: |
-        python -m pr_agent.cli best_practices --pr_number ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
