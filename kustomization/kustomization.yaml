@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+
+# Issue: No namespace specified
+# Issue: No common labels
+# Issue: No common annotations
+
+patchesStrategicMerge:
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: web-app
+  spec:
+    template:
+      spec:
+        containers:
+        - name: web-app
+          # Issue: No resource limits in patch
+          # Issue: No security context in patch
+          env:
+          - name: DEBUG
+            value: "true"  # Issue: Debug mode enabled
+
+# Issue: No image replacement
+# Issue: No replica count configuration
+# Issue: No environment-specific configurations

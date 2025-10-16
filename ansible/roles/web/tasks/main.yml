@@ -1,0 +1,41 @@
+---
+# Web server role tasks
+- name: Install required packages
+  package:
+    name:
+      - httpd
+      - php
+      - php-mysql
+    state: present
+  # Issue: No version pinning
+  
+- name: Configure Apache
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+    backup: yes
+  notify: restart apache
+  # Issue: No validation of template syntax
+  
+- name: Create web directory
+  file:
+    path: "{{ web_root }}"
+    state: directory
+    owner: apache
+    group: apache
+    mode: '0755'
+  # Issue: Variable not defined
+  
+- name: Set SELinux context
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  # Issue: No error handling for SELinux operations
+  
+- name: Start and enable Apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  # Issue: No error handling

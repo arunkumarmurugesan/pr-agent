@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+  namespace: default
+  # Issue: No labels
+  # Issue: No annotations
+spec:
+  type: LoadBalancer  # Issue: Using LoadBalancer instead of ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    # Issue: No name for port
+  selector:
+    app: web-app
+  # Issue: No session affinity
+  # Issue: No external traffic policy

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: default
+  # Issue: No labels
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+      # Issue: No annotations
+    spec:
+      containers:
+      - name: web-app
+        image: nginx:latest  # Issue: Using latest tag
+        ports:
+        - containerPort: 80
+        # Issue: No resource limits or requests
+        # Issue: No security context
+        # Issue: No health checks
+        env:
+        - name: DB_PASSWORD
+          value: "MySecretPassword123!"  # Issue: Hardcoded secret
+        - name: API_KEY
+          value: "sk-1234567890abcdef"  # Issue: Hardcoded secret
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: app-config
+      # Issue: No security context
+      # Issue: No service account
+      # Issue: No node selector or affinity

@@ -1,0 +1,51 @@
+# Default values for web-app
+# Issue: No comments explaining the values
+
+replicaCount: 3
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Issue: No tag specified (will use latest)
+  # Issue: No pull secrets
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  # Issue: No targetPort specified
+  # Issue: No annotations
+
+ingress:
+  enabled: false
+  # Issue: No ingress configuration
+  # Issue: No TLS configuration
+
+resources:
+  # Issue: No resource limits or requests
+  limits: {}
+  requests: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Issue: No security context
+# Issue: No service account
+# Issue: No pod security policy
+# Issue: No network policy
+
+# Issue: Hardcoded secrets instead of using external secrets
+secrets:
+  dbPassword: "MySecretPassword123!"
+  apiKey: "sk-1234567890abcdef"
+
+# Issue: No configmap values
+config:
+  debug: true
+  logLevel: "info"

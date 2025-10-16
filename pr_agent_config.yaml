@@ -1,0 +1,103 @@
+# PR-Agent Configuration
+# This file configures the PR-Agent behavior for different technologies
+
+# General settings
+general:
+  max_tokens: 4000
+  temperature: 0.1
+  model: "gpt-4"
+  
+# Technology-specific configurations
+technologies:
+  terraform:
+    enabled: true
+    security_checks:
+      - "Check for hardcoded secrets"
+      - "Validate resource naming conventions"
+      - "Review security group rules"
+      - "Check for public access to sensitive resources"
+    best_practices:
+      - "Use variables for configuration"
+      - "Implement proper state management"
+      - "Add resource tags"
+      - "Use data sources instead of hardcoded values"
+    file_patterns:
+      - "*.tf"
+      - "*.tfvars"
+      - "*.tf.json"
+  
+  ansible:
+    enabled: true
+    security_checks:
+      - "Check for hardcoded passwords"
+      - "Validate privilege escalation"
+      - "Review file permissions"
+      - "Check for insecure connections"
+    best_practices:
+      - "Use ansible-vault for secrets"
+      - "Implement proper error handling"
+      - "Use handlers for service restarts"
+      - "Follow idempotency principles"
+    file_patterns:
+      - "*.yml"
+      - "*.yaml"
+      - "playbooks/*"
+      - "roles/*"
+  
+  kubernetes:
+    enabled: true
+    security_checks:
+      - "Check resource limits and requests"
+      - "Validate security contexts"
+      - "Review RBAC configurations"
+      - "Check for privileged containers"
+    best_practices:
+      - "Use specific image tags"
+      - "Implement health checks"
+      - "Set resource limits"
+      - "Use ConfigMaps and Secrets properly"
+    file_patterns:
+      - "*.yaml"
+      - "*.yml"
+      - "kustomization.yaml"
+      - "kustomization.yml"
+  
+  helm:
+    enabled: true
+    security_checks:
+      - "Check for hardcoded values"
+      - "Validate chart security"
+      - "Review resource templates"
+      - "Check for privilege escalation"
+    best_practices:
+      - "Use values files for configuration"
+      - "Implement proper chart versioning"
+      - "Add chart metadata"
+      - "Use templates effectively"
+    file_patterns:
+      - "Chart.yaml"
+      - "values*.yaml"
+      - "values*.yml"
+      - "templates/*"
+
+# Review settings
+review:
+  auto_approve_threshold: 0.8
+  require_manual_review: true
+  comment_on_issues: true
+  create_issues_for_critical: true
+  
+# Security settings
+security:
+  critical_severity:
+    - "hardcoded_secrets"
+    - "privilege_escalation"
+    - "insecure_connections"
+  high_severity:
+    - "missing_resource_limits"
+    - "public_access"
+    - "insecure_configurations"
+  medium_severity:
+    - "missing_tags"
+    - "hardcoded_values"
+    - "missing_documentation"

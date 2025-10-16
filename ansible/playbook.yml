@@ -1,0 +1,63 @@
+---
+# Sample Ansible playbook with issues for PR-Agent to catch
+- name: Configure web server
+  hosts: web_servers
+  become: yes  # Issue: Using become without specifying user
+  
+  vars:
+    # Issue: Hardcoded values instead of using ansible-vault
+    db_password: "MySecretPassword123!"
+    api_key: "sk-1234567890abcdef"
+    
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+      # Issue: No error handling
+      
+    - name: Start Apache service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      # Issue: No handlers for service restart
+      
+    - name: Create web directory
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0777'  # Issue: Too permissive permissions
+        
+    - name: Download application code
+      get_url:
+        url: "http://insecure-source.com/app.tar.gz"  # Issue: Insecure HTTP
+        dest: /tmp/app.tar.gz
+        # Issue: No checksum verification
+        
+    - name: Extract application
+      unarchive:
+        src: /tmp/app.tar.gz
+        dest: /var/www/html
+        remote_src: yes
+        # Issue: No validation of extracted files
+        
+    - name: Configure database connection
+      template:
+        src: database.conf.j2
+        dest: /etc/app/database.conf
+        mode: '0644'
+      # Issue: Template might contain sensitive data
+      
+    - name: Create database user
+      mysql_user:
+        name: app_user
+        password: "{{ db_password }}"  # Issue: Password in plain text
+        priv: "*.*:ALL"  # Issue: Too broad privileges
+        state: present
+      # Issue: No error handling for database operations
+      
+    - name: Restart application
+      command: systemctl restart myapp
+      # Issue: Using command instead of service module
+      # Issue: No error handling
