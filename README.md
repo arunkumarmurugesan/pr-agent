@@ -53,7 +53,7 @@ pr-agent/
    - Go to your repository settings
    - Navigate to "Secrets and variables" → "Actions"
    - Add the following secrets:
-     - `OPENAI_API_KEY`: Your OpenAI API key
+     - `OPENAI_KEY`: Your OpenAI API key
      - `GITHUB_TOKEN`: GitHub token (automatically provided)
 
 2. **Customize PR-Agent Configuration**:

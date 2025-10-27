@@ -1,0 +1,35 @@
+# PR-Agent Configuration
+# This file configures PR-Agent to automatically review pull requests
+
+[pr_reviewer]
+# Enable automatic PR review on pull requests
+enable = true
+
+# Extra instructions for the reviewer
+extra_instructions = """
+Please provide a comprehensive review focusing on:
+- Security issues (hardcoded secrets, insecure configurations)
+- Best practices for Terraform, Ansible, Kubernetes, and Helm
+- Code quality and maintainability
+- Infrastructure as Code compliance
+"""
+
+# Enable local file path source for better context
+enable_local_file_path_source = true
+
+[pr_code_suggestions]
+# Enable code suggestions
+enable = true
+
+# Enable local file path source
+enable_local_file_path_source = true
+
+# Enforce suggestions to be minimal and focused
+enable_extended_code_suggestions = true
+
+[pr_summarizer]
+# Enable PR summarization
+enable = true
+
+# Include PR stats
+include_pr_stats = true

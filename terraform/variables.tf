@@ -19,7 +19,7 @@ variable "instance_type" {
 
 # Issue: Missing validation
 variable "allowed_cidr_blocks" {
-  description = "CIDR blocks allowed to access the web server"
+  description = "CIDR blocks allowed to access the web servers"
   type        = list(string)
   default     = ["0.0.0.0/0"]  # Issue: Default is too permissive
 }

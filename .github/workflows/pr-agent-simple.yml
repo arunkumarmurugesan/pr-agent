@@ -1,4 +1,4 @@
-name: PR Agent
+name: PR Agent Simple
 on:
   pull_request:
     types: [opened, synchronize]
@@ -10,25 +10,14 @@ jobs:
       contents: read
       pull-requests: write
       issues: write
-      checks: write
     steps:
     - name: Checkout PR
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        pip install -q openai requests PyGithub
-    
-    - name: Run Simple PR Review
+    - name: Run PR Agent
+      uses: Codium-ai/pr-agent@main
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        python .github/scripts/pr_reviewer.py
