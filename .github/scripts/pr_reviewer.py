@@ -32,11 +32,17 @@ def get_pr_info():
 
 def get_changed_files():
     """Get list of changed files in the PR"""
+    workspace_dir = os.getcwd()
+    
+    # Fetch base branch
+    subprocess.run(['git', 'fetch', 'origin', 'main'], capture_output=True, cwd=workspace_dir)
+    
+    # Get changed files
     result = subprocess.run(
         ['git', 'diff', '--name-only', 'origin/main...HEAD'],
         capture_output=True,
         text=True,
-        cwd='/github/workspace'
+        cwd=workspace_dir
     )
     if result.returncode == 0:
         return [f.strip() for f in result.stdout.split('\n') if f.strip()]
@@ -128,15 +134,15 @@ def main():
         print("❌ GITHUB_REPOSITORY not found")
         return 1
     
-    # Get PR number
-    pr_number = os.getenv('GITHUB_EVENT')
-    if not pr_number:
-        # Try reading from event file
-        event_path = os.getenv('GITHUB_EVENT_PATH', '/github/workflow/event.json')
-        if os.path.exists(event_path):
-            with open(event_path, 'r') as f:
+    # Get PR number from GitHub Actions environment
+    pr_number = os.getenv('GITHUB_EVENT_PATH')
+    if pr_number and os.path.exists(pr_number):
+        try:
+            with open(pr_number, 'r') as f:
                 event_data = json.load(f)
                 pr_number = str(event_data.get('number', ''))
+        except:
+            pr_number = None
     
     if not pr_number:
         print("❌ Could not determine PR number")
