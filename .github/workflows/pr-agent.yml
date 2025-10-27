@@ -22,13 +22,13 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Install PR-Agent
+    - name: Install pragent
       run: |
-        pip install -q pragent[all]
+        pip install -q pragent
     
-    - name: Run PR-Agent Review
+    - name: Run pragent Review
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python -m pr_agent.cli review --pr_url=https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+        python -m pragent.reviewer review --pr_url=https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
