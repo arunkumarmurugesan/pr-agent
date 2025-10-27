@@ -39,3 +39,6 @@ spec:
       # Issue: No security context
       # Issue: No service account
       # Issue: No node selector or affinity
+
+
+

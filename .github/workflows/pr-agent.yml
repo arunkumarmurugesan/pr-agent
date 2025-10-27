@@ -6,8 +6,22 @@ jobs:
   pr_agent_job:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout PR
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
     - name: PR Agent action step
       uses: Codium-ai/pr-agent@main
       env:
         OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        pr_reviewer__extra_instructions: |
+          Please provide a comprehensive review focusing on:
+          - Security issues (hardcoded secrets, insecure configurations)
+          - Best practices for Terraform, Ansible, Kubernetes, and Helm
+          - Code quality and maintainability
+          - Infrastructure as Code compliance
+        pr_reviewer__enable_local_file_path_source: true
+        pr_code_suggestions__enable_local_file_path_source: true

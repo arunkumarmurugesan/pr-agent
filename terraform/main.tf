@@ -58,3 +58,6 @@ resource "aws_instance" "database" {
   # Issue: No security group
   # Issue: No tags
 }
+
+
+

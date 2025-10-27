@@ -16,3 +16,6 @@ spec:
     app: web-app
   # Issue: No session affinity
   # Issue: No external traffic policy
+
+
+
