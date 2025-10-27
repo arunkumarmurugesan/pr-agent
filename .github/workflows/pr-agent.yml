@@ -22,13 +22,13 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Install pragent
+    - name: Install PR-Agent from GitHub
       run: |
-        pip install -q pragent
+        pip install -q git+https://github.com/qodo-ai/pr-agent.git
     
-    - name: Run pragent Review
+    - name: Run PR-Agent Review
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python -m pragent.reviewer review --pr_url=https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+        python -m pr_agent.cli --pr_url=https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }} review
